@@ -1,26 +1,28 @@
 
-def writer(folderName, numberOfStripsPerSide):
+def writer(folderName):
     # Parameters
-    numberOfStrips = 2 * numberOfStripsPerSide
-    peakVoltage = 25000 #Volts
-    voltageDifference = peakVoltage / (numberOfStrips / 2 + 1)
+    peakVoltage = 15000 #Volts
 
     # Opens or creates files
     sif = open('./' + folderName + '/case.sif', 'w')
-    templateSif1 = open('./sif1.txt', 'r')
-    templateSif2 = open('./sif2.txt', 'r')
+    templateSif = open('./sifHeader.txt', 'r')
     boundary = open('./' + folderName + '/mesh.boundary', 'r')
 
-    # Copy template 1
-    templateSifText = templateSif1.read()
-    print("template 1 read")
+    # Copy template
+    templateSifText = templateSif.read()
+    print("template read")
 
     # Write the template
     sif.write(templateSifText)
-    print("template 1 copied")
+    print("template copied")
 
     # Writes the material and equation properties for all the bodies
-    LArBody = "Body 1\n  Target Bodies(1) = 1\n  Name = \"Body 1\"\n  Equation = 1\n  Material = 3\nEnd\n\n"
+    LArBody = "\n".join(["Body 1",
+                         "  Target Bodies(1) = 1",
+                         "  Name = \"Body 1\"",
+                         "  Equation = 1",
+                         "  Material = 3",
+                         "End\n\n"])
     sif.write(LArBody)
     for y in range(5):
         boardBody = "Body " + str(y + 2) + "\n  Target Bodies(1) = " + str(y + 2) + "\n  Name = \"Body " + str(y + 2) + "\"\n  Equation = 1\n  Material = 2\nEnd\n\n"
